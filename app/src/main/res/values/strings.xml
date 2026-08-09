@@ -34,4 +34,18 @@
     <string name="background_data_title">Allow background data</string>
     <string name="background_data_message">The weather widget may stop updating on metered networks (such as mobile data or a Wi‑Fi hotspot) if background data is not allowed; it is recommended to turn this setting on.</string>
     <string name="settings_version">Version %1$s</string>
+    <string name="app_list_widget_label">Apps</string>
+    <string name="app_list_empty">No apps selected</string>
+    <string name="app_list_icon_desc">App icon</string>
+    <string name="app_list_layout_title">Layout</string>
+    <string name="app_list_layout_vertical">Vertical</string>
+    <string name="app_list_layout_horizontal">Horizontal</string>
+    <string name="app_list_display_title">Show</string>
+    <string name="app_list_display_icon">Icon</string>
+    <string name="app_list_display_label">Label</string>
+    <string name="app_list_display_both">Both</string>
+    <string name="app_list_select_apps">Apps to show</string>
+    <string name="app_list_select_all">Select all</string>
+    <string name="app_list_deselect_all">Deselect all</string>
+    <string name="app_list_save">Add widget</string>
 </resources>

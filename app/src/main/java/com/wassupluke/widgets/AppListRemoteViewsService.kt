@@ -3,6 +3,7 @@ package com.wassupluke.widgets
 import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
@@ -28,9 +29,6 @@ private class AppListFactory(
     private val context: Context,
     private val appWidgetId: Int,
 ) : RemoteViewsService.RemoteViewsFactory {
-
-    /** Icon size as a multiple of the label's font size, so bigger font → bigger icons. */
-    private val iconSizeRatio = 2.0f
 
     private var entries: List<AppEntry> = emptyList()
 
@@ -68,13 +66,13 @@ private class AppListFactory(
         val fontSp = AppListStore.fontSize(context, appWidgetId).toFloat()
         val color = WidgetStyle.textColor(context)
 
+        // Position the icon+label group left/center/right within the row.
         val gravity = Gravity.CENTER_VERTICAL or when (AppListStore.textAlign(context, appWidgetId)) {
             Settings.TextAlign.START -> Gravity.START
             Settings.TextAlign.CENTER -> Gravity.CENTER_HORIZONTAL
             Settings.TextAlign.END -> Gravity.END
         }
         item.setInt(R.id.app_list_item_root, "setGravity", gravity)
-        item.setInt(R.id.app_label, "setGravity", gravity)
 
         val showLabel = mode != AppDisplayMode.ICON_ONLY
         item.setViewVisibility(R.id.app_label, if (showLabel) View.VISIBLE else View.GONE)
@@ -87,8 +85,13 @@ private class AppListFactory(
         val showIcon = mode != AppDisplayMode.LABEL_ONLY
         item.setViewVisibility(R.id.app_icon, if (showIcon) View.VISIBLE else View.GONE)
         if (showIcon) {
+            val iconSp = fontSp * AppListWidgetProvider.iconRatio(mode)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                item.setViewLayoutWidth(R.id.app_icon, iconSp, TypedValue.COMPLEX_UNIT_SP)
+                item.setViewLayoutHeight(R.id.app_icon, iconSp, TypedValue.COMPLEX_UNIT_SP)
+            }
             val px = TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_SP, fontSp * iconSizeRatio, context.resources.displayMetrics
+                TypedValue.COMPLEX_UNIT_SP, iconSp, context.resources.displayMetrics
             ).toInt().coerceAtLeast(1)
             val bitmap = runCatching {
                 pmIcon(entry.packageName, px)
@@ -100,10 +103,10 @@ private class AppListFactory(
             }
         }
 
-        item.setOnClickFillInIntent(
-            R.id.app_list_item_root,
-            Intent().putExtra(AppListWidgetProvider.EXTRA_PACKAGE, entry.packageName)
-        )
+        // Tap target is the icon + label only, not the surrounding cell.
+        val fillIn = Intent().putExtra(AppListWidgetProvider.EXTRA_PACKAGE, entry.packageName)
+        item.setOnClickFillInIntent(R.id.app_icon, fillIn)
+        item.setOnClickFillInIntent(R.id.app_label, fillIn)
         return item
     }
 

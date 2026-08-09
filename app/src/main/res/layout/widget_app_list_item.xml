@@ -12,7 +12,6 @@
         android:id="@+id/app_icon"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_gravity="center"
         android:contentDescription="@string/app_list_icon_desc"
         tools:src="@drawable/ic_app_grid" />
 

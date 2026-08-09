@@ -66,6 +66,38 @@
                 android:resource="@xml/alarm_widget_info" />
         </receiver>
 
+        <receiver
+            android:name=".AppListWidgetProvider"
+            android:exported="true"
+            android:icon="@drawable/ic_app_grid"
+            android:label="@string/app_list_widget_label">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_ADDED" />
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+                <action android:name="android.intent.action.PACKAGE_CHANGED" />
+                <data android:scheme="package" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/app_list_widget_info" />
+        </receiver>
+
+        <service
+            android:name=".AppListRemoteViewsService"
+            android:exported="false"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+
+        <activity
+            android:name=".AppListConfigureActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+
         <!-- Receives OS-pushed background location updates to keep the location cache warm. -->
         <receiver
             android:name=".LocationUpdateReceiver"

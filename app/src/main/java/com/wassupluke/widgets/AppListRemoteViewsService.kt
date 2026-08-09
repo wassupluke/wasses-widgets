@@ -4,6 +4,7 @@ import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
 import android.util.TypedValue
+import android.view.Gravity
 import android.view.View
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
@@ -59,12 +60,21 @@ private class AppListFactory(
     }
 
     override fun getViewAt(position: Int): RemoteViews {
-        val entry = entries[position]
+        val entry = entries.getOrNull(position)
+            ?: return RemoteViews(context.packageName, R.layout.widget_app_list_item)
         val item = RemoteViews(context.packageName, R.layout.widget_app_list_item)
 
         val mode = AppListStore.displayMode(context, appWidgetId)
         val fontSp = AppListStore.fontSize(context, appWidgetId).toFloat()
         val color = WidgetStyle.textColor(context)
+
+        val gravity = Gravity.CENTER_VERTICAL or when (AppListStore.textAlign(context, appWidgetId)) {
+            Settings.TextAlign.START -> Gravity.START
+            Settings.TextAlign.CENTER -> Gravity.CENTER_HORIZONTAL
+            Settings.TextAlign.END -> Gravity.END
+        }
+        item.setInt(R.id.app_list_item_root, "setGravity", gravity)
+        item.setInt(R.id.app_label, "setGravity", gravity)
 
         val showLabel = mode != AppDisplayMode.ICON_ONLY
         item.setViewVisibility(R.id.app_label, if (showLabel) View.VISIBLE else View.GONE)
@@ -83,7 +93,11 @@ private class AppListFactory(
             val bitmap = runCatching {
                 pmIcon(entry.packageName, px)
             }.getOrNull()
-            item.setImageViewBitmap(R.id.app_icon, bitmap)
+            if (bitmap != null) {
+                item.setImageViewBitmap(R.id.app_icon, bitmap)
+            } else {
+                item.setImageViewResource(R.id.app_icon, R.drawable.ic_app_grid)
+            }
         }
 
         item.setOnClickFillInIntent(

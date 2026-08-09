@@ -7,6 +7,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.util.TypedValue
 import android.widget.GridView
 import android.widget.RemoteViews
 import com.wassupluke.widgets.data.AppDisplayMode
@@ -67,6 +68,11 @@ class AppListWidgetProvider : AppWidgetProvider() {
                 }
                 views.setRemoteAdapter(R.id.app_grid, serviceIntent)
                 views.setEmptyView(R.id.app_grid, R.id.app_list_empty)
+                views.setTextColor(R.id.app_list_empty, WidgetStyle.textColor(context))
+                views.setTextViewTextSize(
+                    R.id.app_list_empty, TypedValue.COMPLEX_UNIT_SP,
+                    AppListStore.fontSize(context, id).toFloat()
+                )
 
                 // Icon-only grids reflow in either orientation; a labelled vertical list is one column.
                 val layout = AppListStore.layout(context, id)

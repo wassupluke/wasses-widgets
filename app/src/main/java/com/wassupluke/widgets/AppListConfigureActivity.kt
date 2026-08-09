@@ -3,12 +3,16 @@ package com.wassupluke.widgets
 import android.appwidget.AppWidgetManager
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.LinearLayout
 import android.widget.SeekBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import com.google.android.material.button.MaterialButtonToggleGroup
 import com.wassupluke.widgets.data.AppDisplayMode
 import com.wassupluke.widgets.data.AppEntry
@@ -36,6 +40,20 @@ class AppListConfigureActivity : AppCompatActivity() {
         }
 
         setContentView(R.layout.activity_app_list_configure)
+
+        val configRoot = findViewById<View>(R.id.config_root)
+        val basePadding = intArrayOf(
+            configRoot.paddingLeft, configRoot.paddingTop,
+            configRoot.paddingRight, configRoot.paddingBottom
+        )
+        ViewCompat.setOnApplyWindowInsetsListener(configRoot) { v, insets ->
+            val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.updatePadding(
+                basePadding[0] + bars.left, basePadding[1] + bars.top,
+                basePadding[2] + bars.right, basePadding[3] + bars.bottom
+            )
+            insets
+        }
 
         val layoutGroup = findViewById<MaterialButtonToggleGroup>(R.id.layout_group)
         layoutGroup.check(

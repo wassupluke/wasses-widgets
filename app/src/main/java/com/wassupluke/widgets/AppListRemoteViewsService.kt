@@ -89,6 +89,11 @@ private class AppListFactory(
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 item.setViewLayoutWidth(R.id.app_icon, iconSp, TypedValue.COMPLEX_UNIT_SP)
                 item.setViewLayoutHeight(R.id.app_icon, iconSp, TypedValue.COMPLEX_UNIT_SP)
+                // No trailing gap when there's no label to separate from.
+                val endMarginDp = if (mode == AppDisplayMode.ICON_ONLY) 0f else 6f
+                item.setViewLayoutMargin(
+                    R.id.app_icon, RemoteViews.MARGIN_END, endMarginDp, TypedValue.COMPLEX_UNIT_DIP
+                )
             }
             val px = TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_SP, iconSp, context.resources.displayMetrics

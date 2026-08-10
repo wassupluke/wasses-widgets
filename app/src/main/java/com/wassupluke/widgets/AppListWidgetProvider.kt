@@ -92,7 +92,9 @@ class AppListWidgetProvider : AppWidgetProvider() {
             // sp≈dp is close enough for a column estimate. Icon-only cells hug the icon;
             // labelled cells reserve room for the app name.
             val iconDp = AppListStore.fontSize(context, id) * iconRatio(mode)
-            val cellDp = if (mode == AppDisplayMode.ICON_ONLY) iconDp + 8f else iconDp + 96f
+            // Reserve the cell's real footprint (icon + 4dp root padding each side + 4dp
+            // spacing) so a small-font icon grid isn't packed so tight the icons clip.
+            val cellDp = if (mode == AppDisplayMode.ICON_ONLY) iconDp + 12f else iconDp + 96f
             return (widthDp / cellDp).toInt().coerceAtLeast(1)
         }
 

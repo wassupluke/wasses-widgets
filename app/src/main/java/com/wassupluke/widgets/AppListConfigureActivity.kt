@@ -3,6 +3,8 @@ package com.wassupluke.widgets
 import android.appwidget.AppWidgetManager
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.CheckBox
@@ -113,8 +115,19 @@ class AppListConfigureActivity : AppCompatActivity() {
         findViewById<Button>(R.id.deselect_all).setOnClickListener {
             checks.forEach { it.second.isChecked = false }
         }
-        findViewById<Button>(R.id.save).setOnClickListener {
-            save(layoutGroup, modeGroup, alignGroup, fontBar)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.app_list_configure, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return if (item.itemId == R.id.action_add_widget) {
+            save()
+            true
+        } else {
+            super.onOptionsItemSelected(item)
         }
     }
 
@@ -127,12 +140,12 @@ class AppListConfigureActivity : AppCompatActivity() {
         return AppSelection.sortAlphabetically(apps, Locale.getDefault())
     }
 
-    private fun save(
-        layoutGroup: MaterialButtonToggleGroup,
-        modeGroup: MaterialButtonToggleGroup,
-        alignGroup: MaterialButtonToggleGroup,
-        fontBar: SeekBar,
-    ) {
+    private fun save() {
+        val layoutGroup = findViewById<MaterialButtonToggleGroup>(R.id.layout_group)
+        val modeGroup = findViewById<MaterialButtonToggleGroup>(R.id.mode_group)
+        val alignGroup = findViewById<MaterialButtonToggleGroup>(R.id.align_group)
+        val fontBar = findViewById<SeekBar>(R.id.font_size_seekbar)
+
         val selected = checks.filter { it.second.isChecked }.map { it.first }.toSet()
         AppListStore.setSelectedPackages(this, appWidgetId, selected)
         AppListStore.setLayout(

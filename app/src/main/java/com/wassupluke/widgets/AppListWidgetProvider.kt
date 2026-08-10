@@ -11,7 +11,6 @@ import android.os.Bundle
 import android.util.TypedValue
 import android.widget.RemoteViews
 import com.wassupluke.widgets.data.AppDisplayMode
-import com.wassupluke.widgets.data.AppListLayout
 
 /** Home-screen grid of user-selected apps. Configured per instance; taps launch the app. */
 class AppListWidgetProvider : AppWidgetProvider() {
@@ -76,25 +75,35 @@ class AppListWidgetProvider : AppWidgetProvider() {
         fun iconRatio(mode: AppDisplayMode): Float =
             if (mode == AppDisplayMode.ICON_ONLY) ICON_RATIO_ICON_ONLY else ICON_RATIO_INLINE
 
-        /** Reflow column count from the widget's current width; 1 for a labelled vertical list. */
+        // Fallback width when the host reports no size (matches the declared minWidth in
+        // app_list_widget_info.xml). Some AppWidgetHosts never populate the options bundle,
+        // so without this the icon grid would collapse to a single column.
+        private const val DEFAULT_WIDTH_DP = 110
+
+        /**
+         * Reflow column count for the icon-only grid from the widget's current width;
+         * 1 for any labelled list (always a single vertical column).
+         */
         private fun computeColumns(
             context: Context,
             mgr: AppWidgetManager,
             id: Int,
-            layout: AppListLayout,
             mode: AppDisplayMode
         ): Int {
-            val reflow = layout == AppListLayout.HORIZONTAL || mode == AppDisplayMode.ICON_ONLY
-            if (!reflow) return 1
-            val widthDp = mgr.getAppWidgetOptions(id)
-                .getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH, 0)
-            if (widthDp <= 0) return 1
-            // sp≈dp is close enough for a column estimate. Icon-only cells hug the icon;
-            // labelled cells reserve room for the app name.
+            if (mode != AppDisplayMode.ICON_ONLY) return 1
+            // Hosts populate MIN_WIDTH (current-orientation width) and/or MAX_WIDTH
+            // inconsistently — take the smallest positive one, and fall back to the
+            // declared minWidth so a host that reports nothing still yields a real grid.
+            val opts = mgr.getAppWidgetOptions(id)
+            val widthDp = listOf(
+                opts.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH, 0),
+                opts.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH, 0)
+            ).filter { it > 0 }.minOrNull() ?: DEFAULT_WIDTH_DP
+            // sp≈dp is close enough for a column estimate.
             val iconDp = AppListStore.fontSize(context, id) * iconRatio(mode)
             // Reserve the cell's real footprint (icon + 4dp root padding each side + 4dp
             // spacing) so a small-font icon grid isn't packed so tight the icons clip.
-            val cellDp = if (mode == AppDisplayMode.ICON_ONLY) iconDp + 12f else iconDp + 96f
+            val cellDp = iconDp + 12f
             return (widthDp / cellDp).toInt().coerceAtLeast(1)
         }
 
@@ -103,12 +112,11 @@ class AppListWidgetProvider : AppWidgetProvider() {
             for (id in ids) {
                 val views = RemoteViews(context.packageName, R.layout.widget_app_list)
 
-                // Icon-only / horizontal reflow into as many columns as the current width fits;
-                // a labelled vertical list stays one column. A concrete integer (not AUTO_FIT,
-                // which re-measures and collapses to one column) keeps the grid stably filled.
-                val layout = AppListStore.layout(context, id)
+                // Icon-only reflows into as many columns as the current width fits; a labelled
+                // list stays one column. A concrete integer (not AUTO_FIT, which re-measures and
+                // collapses to one column) keeps the grid stably filled.
                 val mode = AppListStore.displayMode(context, id)
-                val columns = computeColumns(context, mgr, id, layout, mode)
+                val columns = computeColumns(context, mgr, id, mode)
 
                 // Unique data URI per id so each widget gets its own factory instance. Fold the
                 // column count into the URI: the host caches a collection's column layout and won't

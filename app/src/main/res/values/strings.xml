@@ -37,9 +37,6 @@
     <string name="app_list_widget_label">Apps</string>
     <string name="app_list_empty">No apps selected</string>
     <string name="app_list_icon_desc">App icon</string>
-    <string name="app_list_layout_title">Layout</string>
-    <string name="app_list_layout_vertical">Vertical</string>
-    <string name="app_list_layout_horizontal">Horizontal</string>
     <string name="app_list_display_title">Show</string>
     <string name="app_list_display_icon">Icon</string>
     <string name="app_list_display_label">Label</string>

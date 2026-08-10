@@ -15,34 +15,8 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/app_list_layout_title"
-            android:textSize="16sp"
-            android:paddingBottom="8dp" />
-
-        <com.google.android.material.button.MaterialButtonToggleGroup
-            android:id="@+id/layout_group"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:singleSelection="true"
-            app:selectionRequired="true">
-
-            <Button android:id="@+id/layout_vertical"
-                style="?attr/materialButtonOutlinedStyle"
-                android:layout_width="0dp" android:layout_height="wrap_content"
-                android:layout_weight="1" android:text="@string/app_list_layout_vertical" />
-
-            <Button android:id="@+id/layout_horizontal"
-                style="?attr/materialButtonOutlinedStyle"
-                android:layout_width="0dp" android:layout_height="wrap_content"
-                android:layout_weight="1" android:text="@string/app_list_layout_horizontal" />
-        </com.google.android.material.button.MaterialButtonToggleGroup>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:text="@string/app_list_display_title"
             android:textSize="16sp"
-            android:layout_marginTop="24dp"
             android:paddingBottom="8dp" />
 
         <com.google.android.material.button.MaterialButtonToggleGroup

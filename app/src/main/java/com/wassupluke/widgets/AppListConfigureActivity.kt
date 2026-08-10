@@ -18,7 +18,6 @@ import androidx.core.view.updatePadding
 import com.google.android.material.button.MaterialButtonToggleGroup
 import com.wassupluke.widgets.data.AppDisplayMode
 import com.wassupluke.widgets.data.AppEntry
-import com.wassupluke.widgets.data.AppListLayout
 import com.wassupluke.widgets.data.AppSelection
 import java.util.Locale
 
@@ -56,15 +55,6 @@ class AppListConfigureActivity : AppCompatActivity() {
             )
             insets
         }
-
-        val layoutGroup = findViewById<MaterialButtonToggleGroup>(R.id.layout_group)
-        layoutGroup.check(
-            if (AppListStore.layout(this, appWidgetId) == AppListLayout.HORIZONTAL) {
-                R.id.layout_horizontal
-            } else {
-                R.id.layout_vertical
-            }
-        )
 
         val modeGroup = findViewById<MaterialButtonToggleGroup>(R.id.mode_group)
         modeGroup.check(
@@ -141,21 +131,12 @@ class AppListConfigureActivity : AppCompatActivity() {
     }
 
     private fun save() {
-        val layoutGroup = findViewById<MaterialButtonToggleGroup>(R.id.layout_group)
         val modeGroup = findViewById<MaterialButtonToggleGroup>(R.id.mode_group)
         val alignGroup = findViewById<MaterialButtonToggleGroup>(R.id.align_group)
         val fontBar = findViewById<SeekBar>(R.id.font_size_seekbar)
 
         val selected = checks.filter { it.second.isChecked }.map { it.first }.toSet()
         AppListStore.setSelectedPackages(this, appWidgetId, selected)
-        AppListStore.setLayout(
-            this, appWidgetId,
-            if (layoutGroup.checkedButtonId == R.id.layout_horizontal) {
-                AppListLayout.HORIZONTAL
-            } else {
-                AppListLayout.VERTICAL
-            }
-        )
         AppListStore.setDisplayMode(
             this, appWidgetId,
             when (modeGroup.checkedButtonId) {

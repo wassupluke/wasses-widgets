@@ -37,12 +37,6 @@ class AppSelectionTest {
         )
     }
 
-    @Test fun layoutUnknownDefaultsToVertical() {
-        assertEquals(AppListLayout.VERTICAL, AppListLayout.fromNameOrDefault("bogus"))
-        assertEquals(AppListLayout.VERTICAL, AppListLayout.fromNameOrDefault(null))
-        assertEquals(AppListLayout.HORIZONTAL, AppListLayout.fromNameOrDefault("HORIZONTAL"))
-    }
-
     @Test fun displayModeUnknownDefaultsToBoth() {
         assertEquals(AppDisplayMode.ICON_AND_LABEL, AppDisplayMode.fromNameOrDefault(null))
         assertEquals(AppDisplayMode.ICON_AND_LABEL, AppDisplayMode.fromNameOrDefault("bogus"))

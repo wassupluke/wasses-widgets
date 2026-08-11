@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Category header sitting above each settings card (Material 3 grouped-settings pattern). -->
+    <style name="SettingsSectionHeader" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">?attr/colorPrimary</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:letterSpacing">0.04</item>
+        <item name="android:layout_marginTop">@dimen/settings_section_spacing</item>
+        <item name="android:layout_marginStart">4dp</item>
+        <item name="android:paddingBottom">8dp</item>
+    </style>
+
+    <!-- Label for an individual control inside a settings card. -->
+    <style name="SettingsLabel" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <!-- Divider between controls within a card. -->
+    <style name="SettingsDivider" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">16dp</item>
+        <item name="android:layout_marginBottom">16dp</item>
+    </style>
+
+</resources>

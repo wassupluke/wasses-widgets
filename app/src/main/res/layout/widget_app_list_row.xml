@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  One ICON_ONLY grid row: up to 10 equal-weight column cells. Each cell is a weighted
+  container that centres a wrap_content icon, so the tap target is the icon itself (not the
+  whole column box) while the columns still line up across rows. A partial last row toggles
+  unused cells INVISIBLE (keeps the column) or GONE (drops it) to snap its icons under the
+  correct columns. Cells beyond the active column count are GONE. All state is set per-row in
+  AppListRemoteViewsService.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/app_list_row_root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:paddingTop="4dp"
+    android:paddingBottom="4dp">
+
+    <LinearLayout android:id="@+id/app_cell_0" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:orientation="horizontal" android:visibility="gone" tools:visibility="visible">
+        <ImageView android:id="@+id/app_icon_0" android:layout_width="wrap_content" android:layout_height="wrap_content" android:scaleType="center" android:contentDescription="@string/app_list_icon_desc" tools:src="@drawable/ic_app_grid" />
+    </LinearLayout>
+    <LinearLayout android:id="@+id/app_cell_1" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:orientation="horizontal" android:visibility="gone">
+        <ImageView android:id="@+id/app_icon_1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:scaleType="center" android:contentDescription="@string/app_list_icon_desc" />
+    </LinearLayout>
+    <LinearLayout android:id="@+id/app_cell_2" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:orientation="horizontal" android:visibility="gone">
+        <ImageView android:id="@+id/app_icon_2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:scaleType="center" android:contentDescription="@string/app_list_icon_desc" />
+    </LinearLayout>
+    <LinearLayout android:id="@+id/app_cell_3" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:orientation="horizontal" android:visibility="gone">
+        <ImageView android:id="@+id/app_icon_3" android:layout_width="wrap_content" android:layout_height="wrap_content" android:scaleType="center" android:contentDescription="@string/app_list_icon_desc" />
+    </LinearLayout>
+    <LinearLayout android:id="@+id/app_cell_4" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:orientation="horizontal" android:visibility="gone">
+        <ImageView android:id="@+id/app_icon_4" android:layout_width="wrap_content" android:layout_height="wrap_content" android:scaleType="center" android:contentDescription="@string/app_list_icon_desc" />
+    </LinearLayout>
+    <LinearLayout android:id="@+id/app_cell_5" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:orientation="horizontal" android:visibility="gone">
+        <ImageView android:id="@+id/app_icon_5" android:layout_width="wrap_content" android:layout_height="wrap_content" android:scaleType="center" android:contentDescription="@string/app_list_icon_desc" />
+    </LinearLayout>
+    <LinearLayout android:id="@+id/app_cell_6" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:orientation="horizontal" android:visibility="gone">
+        <ImageView android:id="@+id/app_icon_6" android:layout_width="wrap_content" android:layout_height="wrap_content" android:scaleType="center" android:contentDescription="@string/app_list_icon_desc" />
+    </LinearLayout>
+    <LinearLayout android:id="@+id/app_cell_7" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:orientation="horizontal" android:visibility="gone">
+        <ImageView android:id="@+id/app_icon_7" android:layout_width="wrap_content" android:layout_height="wrap_content" android:scaleType="center" android:contentDescription="@string/app_list_icon_desc" />
+    </LinearLayout>
+    <LinearLayout android:id="@+id/app_cell_8" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:orientation="horizontal" android:visibility="gone">
+        <ImageView android:id="@+id/app_icon_8" android:layout_width="wrap_content" android:layout_height="wrap_content" android:scaleType="center" android:contentDescription="@string/app_list_icon_desc" />
+    </LinearLayout>
+    <LinearLayout android:id="@+id/app_cell_9" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:orientation="horizontal" android:visibility="gone">
+        <ImageView android:id="@+id/app_icon_9" android:layout_width="wrap_content" android:layout_height="wrap_content" android:scaleType="center" android:contentDescription="@string/app_list_icon_desc" />
+    </LinearLayout>
+</LinearLayout>

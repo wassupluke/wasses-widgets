@@ -16,6 +16,7 @@ object Settings {
     private const val KEY_ALARM_LAUNCH_PACKAGE = "alarm_launch_package"
     private const val KEY_ALARM_LAUNCH_LABEL = "alarm_launch_label"
     private const val KEY_TEXT_ALIGN = "text_align"
+    private const val KEY_ALARM_TEXT_ALIGN = "alarm_text_align"
     private const val KEY_BG_LOCATION_ASKED = "bg_location_asked"
     private const val KEY_BG_DATA_ASKED = "bg_data_asked"
 
@@ -128,11 +129,23 @@ object Settings {
         prefs(context).edit().putBoolean(KEY_BG_DATA_ASKED, true).apply()
     }
 
-    fun textAlign(context: Context): TextAlign =
+    /** Horizontal alignment of the weather widget's text. */
+    fun weatherTextAlign(context: Context): TextAlign =
         enumPref(context, KEY_TEXT_ALIGN, TextAlign.START)
 
-    fun setTextAlign(context: Context, align: TextAlign) =
+    fun setWeatherTextAlign(context: Context, align: TextAlign) =
         setEnumPref(context, KEY_TEXT_ALIGN, align)
+
+    /**
+     * Horizontal alignment of the alarm widget's text. Defaults to the weather
+     * alignment so an upgrade preserves the previously shared value until the
+     * user explicitly diverges them.
+     */
+    fun alarmTextAlign(context: Context): TextAlign =
+        enumPref(context, KEY_ALARM_TEXT_ALIGN, weatherTextAlign(context))
+
+    fun setAlarmTextAlign(context: Context, align: TextAlign) =
+        setEnumPref(context, KEY_ALARM_TEXT_ALIGN, align)
 
     /** The unit to display, honoring the manual override or, for AUTO, the device locale. */
     fun resolvedUnit(context: Context): TemperatureUnit = when (unitMode(context)) {

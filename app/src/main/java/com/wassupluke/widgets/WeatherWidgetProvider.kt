@@ -99,7 +99,7 @@ class WeatherWidgetProvider : AppWidgetProvider() {
             val color = WidgetStyle.textColor(context)
             val temperatureSize = Settings.fontSize(context).toFloat()
             val conditionSize = temperatureSize * Settings.CONDITION_SIZE_RATIO
-            val gravity = WidgetStyle.gravity(context)
+            val gravity = WidgetStyle.gravity(Settings.weatherTextAlign(context))
 
             Debug.log(
                 "weather render ids=${ids.joinToString()} cached=${cached != null} " +

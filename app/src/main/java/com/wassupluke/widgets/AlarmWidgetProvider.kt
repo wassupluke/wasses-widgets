@@ -56,7 +56,7 @@ class AlarmWidgetProvider : AppWidgetProvider() {
                     "creator=${alarm?.showIntent?.creatorPackage ?: "none"}"
             )
             val color = WidgetStyle.textColor(context)
-            val gravity = WidgetStyle.gravity(context)
+            val gravity = WidgetStyle.gravity(Settings.alarmTextAlign(context))
             val fontSize = Settings.fontSize(context).toFloat()
             val onClick = tapIntent(context, alarm)
 

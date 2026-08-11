@@ -8,7 +8,7 @@ object AppSelection {
 
     /** Locale-aware, case-insensitive-primary alphabetical sort by label. */
     fun sortAlphabetically(entries: List<AppEntry>, locale: Locale): List<AppEntry> {
-        val collator = Collator.getInstance(locale)
+        val collator = Collator.getInstance(locale).apply { strength = Collator.PRIMARY }
         return entries.sortedWith(Comparator { a, b -> collator.compare(a.label, b.label) })
     }
 

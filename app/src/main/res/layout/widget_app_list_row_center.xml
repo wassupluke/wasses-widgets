@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  A partial last ICON_ONLY row under CENTER align: the leftover icons are packed together and
+  centred in the row width (no column snapping, unlike widget_app_list_row). Icons draw at
+  their bitmap's native size; unused cells are GONE so the group packs tight. State is set
+  per-row in AppListRemoteViewsService.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/app_list_row_center_root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center"
+    android:paddingTop="4dp"
+    android:paddingBottom="4dp">
+
+    <ImageView android:id="@+id/app_icon_0" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="6dp" android:layout_marginEnd="6dp" android:scaleType="center" android:contentDescription="@string/app_list_icon_desc" android:visibility="gone" tools:src="@drawable/ic_app_grid" tools:visibility="visible" />
+    <ImageView android:id="@+id/app_icon_1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="6dp" android:layout_marginEnd="6dp" android:scaleType="center" android:contentDescription="@string/app_list_icon_desc" android:visibility="gone" />
+    <ImageView android:id="@+id/app_icon_2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="6dp" android:layout_marginEnd="6dp" android:scaleType="center" android:contentDescription="@string/app_list_icon_desc" android:visibility="gone" />
+    <ImageView android:id="@+id/app_icon_3" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="6dp" android:layout_marginEnd="6dp" android:scaleType="center" android:contentDescription="@string/app_list_icon_desc" android:visibility="gone" />
+    <ImageView android:id="@+id/app_icon_4" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="6dp" android:layout_marginEnd="6dp" android:scaleType="center" android:contentDescription="@string/app_list_icon_desc" android:visibility="gone" />
+    <ImageView android:id="@+id/app_icon_5" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="6dp" android:layout_marginEnd="6dp" android:scaleType="center" android:contentDescription="@string/app_list_icon_desc" android:visibility="gone" />
+    <ImageView android:id="@+id/app_icon_6" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="6dp" android:layout_marginEnd="6dp" android:scaleType="center" android:contentDescription="@string/app_list_icon_desc" android:visibility="gone" />
+    <ImageView android:id="@+id/app_icon_7" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="6dp" android:layout_marginEnd="6dp" android:scaleType="center" android:contentDescription="@string/app_list_icon_desc" android:visibility="gone" />
+    <ImageView android:id="@+id/app_icon_8" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="6dp" android:layout_marginEnd="6dp" android:scaleType="center" android:contentDescription="@string/app_list_icon_desc" android:visibility="gone" />
+    <ImageView android:id="@+id/app_icon_9" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="6dp" android:layout_marginEnd="6dp" android:scaleType="center" android:contentDescription="@string/app_list_icon_desc" android:visibility="gone" />
+</LinearLayout>

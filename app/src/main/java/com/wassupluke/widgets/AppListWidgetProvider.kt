@@ -64,7 +64,11 @@ class AppListWidgetProvider : AppWidgetProvider() {
     companion object {
         const val ACTION_LAUNCH_APP = "com.wassupluke.widgets.action.LAUNCH_APP"
         const val EXTRA_PACKAGE = "com.wassupluke.widgets.extra.PACKAGE"
-        private const val EXTRA_GRID_GENERATION = "com.wassupluke.widgets.extra.GRID_GEN"
+        // Column count for the ICON_ONLY reflow grid; the factory reads it back to lay out rows.
+        internal const val EXTRA_COLUMNS = "com.wassupluke.widgets.extra.COLUMNS"
+
+        // Upper bound on reflow columns — the row layouts declare this many cell slots.
+        internal const val MAX_COLUMNS = 10
 
         // Icon size as a multiple of the font size. Bigger when icon-only (fills the grid),
         // smaller when inline beside a label. Shared with the item factory so the column
@@ -104,7 +108,7 @@ class AppListWidgetProvider : AppWidgetProvider() {
             // Reserve the cell's real footprint (icon + 4dp root padding each side + 4dp
             // spacing) so a small-font icon grid isn't packed so tight the icons clip.
             val cellDp = iconDp + 12f
-            return (widthDp / cellDp).toInt().coerceAtLeast(1)
+            return (widthDp / cellDp).toInt().coerceIn(1, MAX_COLUMNS)
         }
 
         /** Rebuild the RemoteViews for each widget and (re)load its data. */
@@ -119,12 +123,12 @@ class AppListWidgetProvider : AppWidgetProvider() {
                 val columns = computeColumns(context, mgr, id, mode)
 
                 // Unique data URI per id so each widget gets its own factory instance. Fold the
-                // column count into the URI: the host caches a collection's column layout and won't
-                // re-apply setNumColumns on a plain update, so a new URI forces it to rebuild the
-                // grid when the column count changes (reconfigure / resize).
+                // column count into the URI: the host caches a collection's row views and won't
+                // re-run the factory on a plain update, so a new URI forces it to rebuild the
+                // rows when the column count changes (reconfigure / resize).
                 val serviceIntent = Intent(context, AppListRemoteViewsService::class.java).apply {
                     putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, id)
-                    putExtra(EXTRA_GRID_GENERATION, columns)
+                    putExtra(EXTRA_COLUMNS, columns)
                     data = Uri.parse(toUri(Intent.URI_INTENT_SCHEME))
                 }
                 views.setRemoteAdapter(R.id.app_grid, serviceIntent)
@@ -135,7 +139,10 @@ class AppListWidgetProvider : AppWidgetProvider() {
                     AppListStore.fontSize(context, id).toFloat()
                 )
 
-                views.setInt(R.id.app_grid, "setNumColumns", columns)
+                // Always one collection column: each factory item is a full-width row that lays
+                // out its own icon columns (so a partial last row can align independently — a
+                // GridView left-packs its last row with no way to align it).
+                views.setInt(R.id.app_grid, "setNumColumns", 1)
 
                 // Mutable template completed per-item by setOnClickFillInIntent (carries the package).
                 val template = PendingIntent.getBroadcast(

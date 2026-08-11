@@ -121,14 +121,8 @@ class AppListConfigureActivity : AppCompatActivity() {
         }
     }
 
-    private fun loadApps(): List<AppEntry> {
-        val pm = packageManager
-        val query = Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER)
-        val apps = pm.queryIntentActivities(query, 0)
-            .distinctBy { it.activityInfo.packageName }
-            .map { AppEntry(it.activityInfo.packageName, it.loadLabel(pm).toString()) }
-        return AppSelection.sortAlphabetically(apps, Locale.getDefault())
-    }
+    private fun loadApps(): List<AppEntry> =
+        AppSelection.sortAlphabetically(packageManager.launcherApps(), Locale.getDefault())
 
     private fun save() {
         val modeGroup = findViewById<MaterialButtonToggleGroup>(R.id.mode_group)

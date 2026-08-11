@@ -13,162 +13,283 @@
         android:orientation="vertical"
         android:gravity="start|top">
 
-        <TextView
-            android:id="@+id/status"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:paddingBottom="16dp" />
+        <!-- ===== Appearance (shared by both widgets) ===== -->
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/main_hint"
-            android:paddingBottom="24dp" />
+            style="@style/SettingsSectionHeader"
+            android:text="@string/settings_section_appearance" />
 
-        <com.google.android.material.materialswitch.MaterialSwitch
-            android:id="@+id/switch_show_condition"
+        <com.google.android.material.card.MaterialCardView
+            style="@style/Widget.Material3.CardView.Filled"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/settings_show_condition" />
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/settings_unit_title"
-            android:textSize="16sp"
-            android:layout_marginTop="24dp"
-            android:paddingBottom="8dp" />
-
-        <RadioGroup
-            android:id="@+id/unit_group"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <RadioButton
-                android:id="@+id/unit_auto"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/settings_unit_auto" />
+                android:orientation="vertical"
+                android:padding="16dp">
 
-            <RadioButton
-                android:id="@+id/unit_celsius"
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/settings_section_appearance_subtitle"
+                    android:textAppearance="?attr/textAppearanceBodySmall"
+                    android:textColor="?android:attr/textColorSecondary"
+                    android:paddingBottom="16dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        style="@style/SettingsLabel"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:text="@string/settings_font_size" />
+
+                    <TextView
+                        android:id="@+id/font_size_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        tools:text="30 sp" />
+                </LinearLayout>
+
+                <SeekBar
+                    android:id="@+id/font_size_seekbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:min="12"
+                    android:max="64" />
+
+                <com.google.android.material.divider.MaterialDivider
+                    style="@style/SettingsDivider" />
+
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/switch_dynamic_color"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/settings_dynamic_color" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- ===== Weather widget ===== -->
+
+        <TextView
+            style="@style/SettingsSectionHeader"
+            android:text="@string/settings_section_weather" />
+
+        <com.google.android.material.card.MaterialCardView
+            style="@style/Widget.Material3.CardView.Filled"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/settings_unit_celsius" />
+                android:orientation="vertical"
+                android:padding="16dp">
 
-            <RadioButton
-                android:id="@+id/unit_fahrenheit"
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/switch_show_condition"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/settings_show_condition" />
+
+                <com.google.android.material.divider.MaterialDivider
+                    style="@style/SettingsDivider" />
+
+                <TextView
+                    style="@style/SettingsLabel"
+                    android:text="@string/settings_unit_title"
+                    android:paddingBottom="8dp" />
+
+                <RadioGroup
+                    android:id="@+id/unit_group"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <RadioButton
+                        android:id="@+id/unit_auto"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/settings_unit_auto" />
+
+                    <RadioButton
+                        android:id="@+id/unit_celsius"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/settings_unit_celsius" />
+
+                    <RadioButton
+                        android:id="@+id/unit_fahrenheit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/settings_unit_fahrenheit" />
+                </RadioGroup>
+
+                <com.google.android.material.divider.MaterialDivider
+                    style="@style/SettingsDivider" />
+
+                <TextView
+                    style="@style/SettingsLabel"
+                    android:text="@string/settings_alignment"
+                    android:paddingBottom="8dp" />
+
+                <com.google.android.material.button.MaterialButtonToggleGroup
+                    android:id="@+id/align_group"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:singleSelection="true"
+                    app:selectionRequired="true">
+
+                    <Button
+                        android:id="@+id/align_start"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/align_left" />
+
+                    <Button
+                        android:id="@+id/align_center"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/align_center" />
+
+                    <Button
+                        android:id="@+id/align_end"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/align_right" />
+                </com.google.android.material.button.MaterialButtonToggleGroup>
+
+                <com.google.android.material.divider.MaterialDivider
+                    style="@style/SettingsDivider" />
+
+                <TextView
+                    style="@style/SettingsLabel"
+                    android:text="@string/settings_tap_action_short"
+                    android:paddingBottom="8dp" />
+
+                <Button
+                    android:id="@+id/tap_action_button"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- ===== Alarm widget ===== -->
+
+        <TextView
+            style="@style/SettingsSectionHeader"
+            android:text="@string/settings_section_alarm" />
+
+        <com.google.android.material.card.MaterialCardView
+            style="@style/Widget.Material3.CardView.Filled"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/settings_unit_fahrenheit" />
-        </RadioGroup>
+                android:orientation="vertical"
+                android:padding="16dp">
 
-        <com.google.android.material.materialswitch.MaterialSwitch
-            android:id="@+id/switch_dynamic_color"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="@string/settings_dynamic_color" />
+                <TextView
+                    style="@style/SettingsLabel"
+                    android:text="@string/settings_alignment"
+                    android:paddingBottom="8dp" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginTop="24dp">
+                <com.google.android.material.button.MaterialButtonToggleGroup
+                    android:id="@+id/alarm_align_group"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:singleSelection="true"
+                    app:selectionRequired="true">
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/settings_font_size"
-                android:textSize="16sp" />
+                    <Button
+                        android:id="@+id/alarm_align_start"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/align_left" />
 
-            <TextView
-                android:id="@+id/font_size_value"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                tools:text="30 sp" />
-        </LinearLayout>
+                    <Button
+                        android:id="@+id/alarm_align_center"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/align_center" />
 
-        <SeekBar
-            android:id="@+id/font_size_seekbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:min="12"
-            android:max="64" />
+                    <Button
+                        android:id="@+id/alarm_align_end"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/align_right" />
+                </com.google.android.material.button.MaterialButtonToggleGroup>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/settings_text_align"
-            android:textSize="16sp"
-            android:layout_marginTop="24dp"
-            android:paddingBottom="8dp" />
+                <com.google.android.material.divider.MaterialDivider
+                    style="@style/SettingsDivider" />
 
-        <com.google.android.material.button.MaterialButtonToggleGroup
-            android:id="@+id/align_group"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:singleSelection="true"
-            app:selectionRequired="true">
+                <TextView
+                    style="@style/SettingsLabel"
+                    android:text="@string/settings_tap_action_short"
+                    android:paddingBottom="8dp" />
 
-            <Button
-                android:id="@+id/align_start"
-                style="?attr/materialButtonOutlinedStyle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/align_left" />
+                <Button
+                    android:id="@+id/alarm_tap_action_button"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
-            <Button
-                android:id="@+id/align_center"
-                style="?attr/materialButtonOutlinedStyle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/align_center" />
-
-            <Button
-                android:id="@+id/align_end"
-                style="?attr/materialButtonOutlinedStyle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/align_right" />
-        </com.google.android.material.button.MaterialButtonToggleGroup>
+        <!-- ===== Permissions ===== -->
 
         <TextView
+            style="@style/SettingsSectionHeader"
+            android:text="@string/settings_section_permissions" />
+
+        <com.google.android.material.card.MaterialCardView
+            style="@style/Widget.Material3.CardView.Filled"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/settings_tap_action"
-            android:textSize="16sp"
-            android:layout_marginTop="24dp"
-            android:paddingBottom="8dp" />
+            android:layout_height="wrap_content">
 
-        <Button
-            android:id="@+id/tap_action_button"
-            style="?attr/materialButtonOutlinedStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/settings_alarm_tap_action"
-            android:textSize="16sp"
-            android:layout_marginTop="24dp"
-            android:paddingBottom="8dp" />
+                <TextView
+                    android:id="@+id/perm_location"
+                    style="@style/SettingsLabel"
+                    android:paddingBottom="8dp" />
 
-        <Button
-            android:id="@+id/alarm_tap_action_button"
-            style="?attr/materialButtonOutlinedStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp" />
+                <TextView
+                    android:id="@+id/perm_background_location"
+                    style="@style/SettingsLabel"
+                    android:paddingBottom="8dp" />
+
+                <TextView
+                    android:id="@+id/perm_background_data"
+                    style="@style/SettingsLabel" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
         <TextView
             android:id="@+id/version_info"

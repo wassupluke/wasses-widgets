@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -25,12 +26,10 @@ import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var status: TextView
-
     private val requestPermission =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
             Debug.log("COARSE_LOCATION permission granted=$granted")
-            updateStatus(granted)
+            updatePermissionStatus()
             if (granted) {
                 // "Allow all the time" must be requested separately, after foreground is granted.
                 runOnboardingPrompts()
@@ -52,8 +51,6 @@ class MainActivity : AppCompatActivity() {
             v.updatePadding(base + bars.left, base + bars.top, base + bars.right, base + bars.bottom)
             insets
         }
-
-        status = findViewById(R.id.status)
 
         val toggle = findViewById<MaterialSwitch>(R.id.switch_show_condition)
         toggle.isChecked = Settings.showCondition(this)
@@ -111,26 +108,24 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        val alignGroup = findViewById<MaterialButtonToggleGroup>(R.id.align_group)
-        alignGroup.check(
-            when (Settings.textAlign(this)) {
-                Settings.TextAlign.START -> R.id.align_start
-                Settings.TextAlign.CENTER -> R.id.align_center
-                Settings.TextAlign.END -> R.id.align_end
-            }
+        bindAlignGroup(
+            groupId = R.id.align_group,
+            startId = R.id.align_start,
+            centerId = R.id.align_center,
+            endId = R.id.align_end,
+            current = { Settings.weatherTextAlign(this) },
+            set = { Settings.setWeatherTextAlign(this, it) },
+            render = { WeatherWidgetProvider.renderWidgets(this) },
         )
-        alignGroup.addOnButtonCheckedListener { _, checkedId, isChecked ->
-            if (!isChecked) return@addOnButtonCheckedListener
-            Settings.setTextAlign(
-                this,
-                when (checkedId) {
-                    R.id.align_center -> Settings.TextAlign.CENTER
-                    R.id.align_end -> Settings.TextAlign.END
-                    else -> Settings.TextAlign.START
-                }
-            )
-            renderAllWidgets()
-        }
+        bindAlignGroup(
+            groupId = R.id.alarm_align_group,
+            startId = R.id.alarm_align_start,
+            centerId = R.id.alarm_align_center,
+            endId = R.id.alarm_align_end,
+            current = { Settings.alarmTextAlign(this) },
+            set = { Settings.setAlarmTextAlign(this, it) },
+            render = { AlarmWidgetProvider.renderAlarmWidgets(this) },
+        )
 
         bindTapButton(
             buttonId = R.id.tap_action_button,
@@ -266,6 +261,37 @@ class MainActivity : AppCompatActivity() {
         AlarmWidgetProvider.renderAlarmWidgets(this)
     }
 
+    /** Binds an alignment toggle group to a per-widget-family alignment setting. */
+    private fun bindAlignGroup(
+        groupId: Int,
+        startId: Int,
+        centerId: Int,
+        endId: Int,
+        current: () -> Settings.TextAlign,
+        set: (Settings.TextAlign) -> Unit,
+        render: () -> Unit,
+    ) {
+        val group = findViewById<MaterialButtonToggleGroup>(groupId)
+        group.check(
+            when (current()) {
+                Settings.TextAlign.START -> startId
+                Settings.TextAlign.CENTER -> centerId
+                Settings.TextAlign.END -> endId
+            }
+        )
+        group.addOnButtonCheckedListener { _, checkedId, isChecked ->
+            if (!isChecked) return@addOnButtonCheckedListener
+            set(
+                when (checkedId) {
+                    centerId -> Settings.TextAlign.CENTER
+                    endId -> Settings.TextAlign.END
+                    else -> Settings.TextAlign.START
+                }
+            )
+            render()
+        }
+    }
+
     /** Binds a tap-action button: shows its current target and opens the app picker. */
     private fun bindTapButton(
         buttonId: Int,
@@ -323,7 +349,7 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         val granted = hasPermission()
         Debug.log("MainActivity onResume, location permission=$granted")
-        updateStatus(granted)
+        updatePermissionStatus()
         // Foreground fetch: refreshes now and seeds the last-known location that background
         // widget refreshes reuse. Also (re)register background location updates so the location
         // cache stays warm between app opens.
@@ -345,9 +371,40 @@ class MainActivity : AppCompatActivity() {
         ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) ==
             PackageManager.PERMISSION_GRANTED
 
-    private fun updateStatus(granted: Boolean) {
-        status.setText(
-            if (granted) R.string.permission_granted else R.string.permission_denied
+    /** True when "Allow all the time" is held (implied by the foreground grant pre-API 29). */
+    private fun hasBackgroundLocation(): Boolean {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) return hasPermission()
+        return ContextCompat.checkSelfPermission(
+            this, Manifest.permission.ACCESS_BACKGROUND_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    /** False only when Data Saver explicitly restricts this app's metered background data. */
+    private fun isBackgroundDataAllowed(): Boolean {
+        val cm = getSystemService(ConnectivityManager::class.java) ?: return true
+        return cm.restrictBackgroundStatus !=
+            ConnectivityManager.RESTRICT_BACKGROUND_STATUS_ENABLED
+    }
+
+    /** Refresh the required + optional permission rows with a check/cross per permission. */
+    private fun updatePermissionStatus() {
+        setPermissionRow(R.id.perm_location, R.string.permission_location, hasPermission())
+        setPermissionRow(
+            R.id.perm_background_location,
+            R.string.permission_background_location,
+            hasBackgroundLocation(),
         )
+        setPermissionRow(
+            R.id.perm_background_data,
+            R.string.permission_background_data,
+            isBackgroundDataAllowed(),
+        )
+    }
+
+    private fun setPermissionRow(viewId: Int, nameRes: Int, granted: Boolean) {
+        // ✔️ heavy check (granted) vs. ❌ cross mark (not granted).
+        val status = if (granted) "✔️" else "❌"
+        findViewById<TextView>(viewId).text =
+            getString(R.string.permission_row, getString(nameRes), status)
     }
 }

@@ -47,9 +47,9 @@ object WidgetStyle {
         return (hints and WallpaperColors.HINT_SUPPORTS_DARK_TEXT) != 0
     }
 
-    /** Vertical-centered gravity with the horizontal alignment from settings. */
-    fun gravity(context: Context): Int =
-        Gravity.CENTER_VERTICAL or when (Settings.textAlign(context)) {
+    /** Vertical-centered gravity with the given horizontal alignment. */
+    fun gravity(align: Settings.TextAlign): Int =
+        Gravity.CENTER_VERTICAL or when (align) {
             Settings.TextAlign.START -> Gravity.START
             Settings.TextAlign.CENTER -> Gravity.CENTER_HORIZONTAL
             Settings.TextAlign.END -> Gravity.END
